@@ -1,1 +1,41 @@
 @import "tailwindcss";
+
+@plugin "daisyui" {
+  themes: light --default;
+}
+
+.global-container {
+  @apply w-full px-4 sm:container md:px-6 lg:px-8 xl:w-8/12 mx-auto;
+}
+
+.global-margin {
+  @apply my-12 md:my-24;
+}
+
+.global-padding {
+  @apply py-12 md:py-24;
+}
+
+.slider-height {
+  @apply h-[65vh] md:h-[85vh];
+}
+
+.swiper-pagination-bullet {
+  @apply z-10;
+}
+
+p {
+  @apply text-base;
+}
+
+.dash-nav li {
+  @apply px-2 md:px-6 text-base md:text-xl w-full;
+}
+
+.dash-nav li a {
+  @apply my-4 flex gap-4 w-full items-center;
+}
+
+.dash-nav li:hover {
+  @apply bg-stone-500 text-white;
+}
