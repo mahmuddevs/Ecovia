@@ -7,7 +7,7 @@ const ContactInfo = () => {
                 <h2 className="text-3xl font-bold text-emerald-600">Contact Information</h2>
                 <p className="text-gray-700 flex gap-3 items-center !text-xl"><FaMapPin /> Mannerheimintie 20 B, 00100 Helsinki, Finland</p>
                 <p className="text-gray-700 flex gap-3 items-center !text-xl"><FaPhone /> +1 (234) 567-8901</p>
-                <p className="text-gray-700 flex gap-3 items-center !text-xl"><FaEnvelope /> contact@ecoalliance.org</p>
+                <p className="text-gray-700 flex gap-3 items-center !text-xl"><FaEnvelope /> contact@ecovia.org</p>
             </div>
             <div className="mt-8">
                 <iframe

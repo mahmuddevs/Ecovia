@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
+import Providers from "@/providers/Providers";
 // import StoreProvider from "./StoreProvider";
 // import AuthProvider from "./components/AuthProvider";
 
@@ -26,7 +27,9 @@ export default function RootLayout({
         className={`${poppins.variable} antialiased`}
       >
         <main className="min-h-screen">
-          {children}
+          <Providers>
+            {children}
+          </Providers>
         </main>
       </body>
     </html>

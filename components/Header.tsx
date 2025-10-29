@@ -1,6 +1,7 @@
 import { FaLeaf } from "react-icons/fa6";
 // import UserProfile from "./UserProfile";
 import Link from "next/link";
+import UserProfile from "./UserProfile";
 
 const Header = () => {
   const navItems = (
@@ -52,14 +53,14 @@ const Header = () => {
       <div className="navbar justify-between global-container">
         <Link href="/" className="flex items-center gap-2">
           <FaLeaf className="h-6 w-6 text-emerald-400" />
-          <span className="font-bold text-white text-2xl">EcoAlliance</span>
+          <span className="font-bold text-white text-2xl">EcoVia</span>
         </Link>
         <div className="flex items-center gap-4">
           <div className="hidden lg:flex">
             <ul className="menu menu-horizontal px-1">{navItems}</ul>
           </div>
           <div className="flex items-center">
-            {/* <UserProfile /> */}
+            <UserProfile />
             <div className="dropdown relative">
               <div
                 tabIndex={0}
