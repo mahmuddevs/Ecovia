@@ -8,8 +8,8 @@ import { ApplyAsVolunteer } from "@/actions/events/VolunteerActions";
 import Swal from "sweetalert2";
 import { useAppSelector } from "@/lib/hooks";
 import { redirect } from "next/navigation";
-import DonateModal from "../(dashboard)/components/DonateModal";
-import PaymentModal from "../(home)/donate/PaymentModal";
+import DonateModal from "./DonateModal";
+import PaymentModal from "@/app/(home)/donate/PaymentModal";
 
 export type FormValues = {
   name: string;
@@ -108,7 +108,7 @@ const EventButtons = ({ eventId }: { eventId: string }) => {
     <>
       <div className="flex flex-col sm:flex-row gap-4 mt-10">
         <button
-          className="btn bg-emerald-600 text-white w-full sm:w-auto"
+          className="btn bg-tprimary text-white w-full sm:w-auto"
           onClick={handleApplyButton}
         >
           <FaHandsHelping className="mr-2" />

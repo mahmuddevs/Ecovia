@@ -52,7 +52,7 @@ const Header = () => {
     <header className="w-full bg-black/40 backdrop-blur-sm fixed top-0 z-[999]">
       <div className="navbar justify-between global-container">
         <Link href="/" className="flex items-center gap-2">
-          <FaLeaf className="h-6 w-6 text-emerald-400" />
+          <FaLeaf className="h-6 w-6 text-tprimary" />
           <span className="font-bold text-white text-2xl">EcoVia</span>
         </Link>
         <div className="flex items-center gap-4">

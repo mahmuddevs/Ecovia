@@ -8,7 +8,7 @@ const Footer = () => {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
                     <div>
                         <div className="flex items-center gap-2 mb-4">
-                            <FaLeaf className="h-6 w-6 text-emerald-400" />
+                            <FaLeaf className="h-6 w-6 text-tprimary" />
                             <span className="font-bold text-xl">EcoVia</span>
                         </div>
                         <p className="text-gray-400">
@@ -22,7 +22,7 @@ const Footer = () => {
                         <ul className="space-y-2">
                             {["Home", "About Us", "Events", "Donate", "Contact Us"].map((item) => (
                                 <li key={item}>
-                                    <Link href="#" className="text-gray-400 hover:text-emerald-400 transition-colors">
+                                    <Link href="#" className="text-gray-400 hover:text-tprimary transition-colors">
                                         {item}
                                     </Link>
                                 </li>
@@ -35,7 +35,7 @@ const Footer = () => {
                         <ul className="space-y-2">
                             {["Volunteer", "Donate", "Partner With Us", "Corporate Sponsorship", "Events"].map((item) => (
                                 <li key={item}>
-                                    <Link href="#" className="text-gray-400 hover:text-emerald-400 transition-colors">
+                                    <Link href="#" className="text-gray-400 hover:text-tprimary transition-colors">
                                         {item}
                                     </Link>
                                 </li>

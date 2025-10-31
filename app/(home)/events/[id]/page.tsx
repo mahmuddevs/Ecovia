@@ -8,7 +8,7 @@ import {
 import moment from "moment";
 import Image from "next/image";
 import { getEventById } from "@/actions/events/EventActions";
-import EventButtons from "@/app/components/EventButtons";
+import EventButtons from "@/components/EventButtons";
 
 type Props = {
   params: Promise<{ id: string }>;

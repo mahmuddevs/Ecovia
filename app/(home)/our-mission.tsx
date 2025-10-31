@@ -14,20 +14,20 @@ const OurMission = () => {
                 />
                 <div className="grid md:grid-cols-3 gap-6 mb-10 text-center">
                     <div className="bg-emerald-50 p-6 rounded-2xl shadow-sm hover:shadow-md transition">
-                        <div className="text-4xl mb-4 flex justify-center text-success"><PiPlantFill /></div>
-                        <h3 className="text-lg font-semibold text-emerald-600 mb-2">Sustainability</h3>
+                        <div className="text-4xl mb-4 flex justify-center text-tprimary"><PiPlantFill /></div>
+                        <h3 className="text-lg font-semibold text-tprimary mb-2">Sustainability</h3>
                         <p className="text-gray-600 text-sm">Promoting eco-friendly practices to preserve natural resources.</p>
                     </div>
 
                     <div className="bg-emerald-50 p-6 rounded-2xl shadow-sm hover:shadow-md transition">
-                        <div className="text-4xl mb-4 flex justify-center text-success"><TbHeartHandshake /></div>
-                        <h3 className="text-lg font-semibold text-emerald-600 mb-2">Community Engagement</h3>
+                        <div className="text-4xl mb-4 flex justify-center text-tprimary"><TbHeartHandshake /></div>
+                        <h3 className="text-lg font-semibold text-tprimary mb-2">Community Engagement</h3>
                         <p className="text-gray-600 text-sm">Empowering local actions for collective impact and resilience.</p>
                     </div>
 
                     <div className="bg-emerald-50 p-6 rounded-2xl shadow-sm hover:shadow-md transition">
-                        <div className="text-4xl mb-4 flex justify-center text-success"><IoBookSharp /></div>
-                        <h3 className="text-lg font-semibold text-emerald-600 mb-2">Education & Awareness</h3>
+                        <div className="text-4xl mb-4 flex justify-center text-tprimary"><IoBookSharp /></div>
+                        <h3 className="text-lg font-semibold text-tprimary mb-2">Education & Awareness</h3>
                         <p className="text-gray-600 text-sm">Spreading environmental knowledge to inspire conscious living.</p>
                     </div>
                 </div>

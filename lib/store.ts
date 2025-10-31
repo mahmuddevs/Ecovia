@@ -1,12 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit'
 import authReducer from '@/lib/features/authSlice/authSlice'
-import eventReducer from '@/lib/features/eventSlice/eventSlice'
 
 export const makeStore = () => {
     return configureStore({
         reducer: {
             auth: authReducer,
-            events: eventReducer
         },
     })
 }

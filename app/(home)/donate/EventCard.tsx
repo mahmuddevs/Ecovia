@@ -6,7 +6,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { useEffect, useRef, useState } from "react"
 import PaymentModal from "./PaymentModal"
-import DonateModal from "@/app/(dashboard)/components/DonateModal"
+import DonateModal from "@/components/DonateModal"
 
 const EventCard = ({
   _id,
@@ -95,7 +95,7 @@ const EventCard = ({
           <div className="mt-6 flex flex-col sm:flex-row gap-3">
             <button
               onClick={openDonateModal}
-              className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2 rounded-lg transition duration-200 cursor-pointer"
+              className="flex-1 bg-tprimary hover:bg-emerald-700 text-white font-medium py-2 rounded-lg transition duration-200 cursor-pointer"
             >
               Donate Now
             </button>

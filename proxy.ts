@@ -1,12 +1,15 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { verifyToken } from "./lib/jwt/verifyToken";
 
-const ProtectedPages = ['/dashboard/admin', '/dashboard/volunteer', '/dashboard/donor']
+const ProtectedPages = ['/dashboard/admin', '/dashboard/volunteer', '/dashboard/donor'];
+const PublicPages = ['/login', '/register', "/forgot-password"]; // <-- use array here
 
 export async function proxy(req: NextRequest) {
     const token = req.cookies.get("authToken")?.value;
     const path = req.nextUrl.pathname;
-    const protectedForUsers = path.startsWith('/login') || path.startsWith('/register');
+
+    // Check if path matches any public page
+    const protectedForUsers = PublicPages.some((page) => path.startsWith(page));
 
     if (!token) {
         if (protectedForUsers) {
@@ -23,7 +26,6 @@ export async function proxy(req: NextRequest) {
 
     const { userType } = decoded as { userType: string }
 
-
     const isProtectedPage = ProtectedPages.some((page) => path.startsWith(page));
 
     if (isProtectedPage) {
@@ -36,7 +38,6 @@ export async function proxy(req: NextRequest) {
     if (decoded && protectedForUsers) {
         return NextResponse.redirect(new URL("/", req.url));
     }
-
 }
 
 export const config = {
@@ -46,5 +47,6 @@ export const config = {
         "/dashboard/donor/:path*",
         "/login",
         "/register",
+        "/forgot-password"
     ],
 };

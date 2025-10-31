@@ -82,7 +82,7 @@ const VolunteerApplyModal = ({
           </div>
 
           <div className="flex gap-2">
-            <button type="submit" className="btn bg-emerald-600 text-white">
+            <button type="submit" className="btn bg-tprimary text-white">
               Submit
             </button>
             <button

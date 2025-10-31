@@ -15,7 +15,7 @@ const SectionTitle = ({
         {heading}
       </h2>
       <p className={`!text-xl text-black`}>{paragraph}</p>
-      <div className="w-24 h-1 bg-emerald-400 mx-auto"></div>
+      <div className="w-24 h-1 bg-tprimary mx-auto"></div>
     </div>
   )
 }

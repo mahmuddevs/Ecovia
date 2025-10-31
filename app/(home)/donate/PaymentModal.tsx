@@ -1,5 +1,5 @@
 "use client"
-import CheckoutForm from "@/app/components/StripeCheckout"
+import CheckoutForm from "@/components/StripeCheckout"
 import { RefObject } from "react"
 
 type Props = {

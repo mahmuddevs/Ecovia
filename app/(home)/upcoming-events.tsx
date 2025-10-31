@@ -31,7 +31,7 @@ const UpcomingEvents = async () => {
                 } */}
             </div>
             <div className="flex justify-center my-8">
-                <Link href='/events' className="btn btn-success text-white">View All Events</Link>
+                <Link href='/events' className="btn bg-tprimary text-white">View All Events</Link>
             </div>
         </section>
     )

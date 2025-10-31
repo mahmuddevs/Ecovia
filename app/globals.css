@@ -4,6 +4,10 @@
   themes: light --default;
 }
 
+@theme inline {
+  --color-tprimary: #028a0f;
+}
+
 .global-container {
   @apply w-full px-4 sm:container md:px-6 lg:px-8 xl:w-8/12 mx-auto;
 }

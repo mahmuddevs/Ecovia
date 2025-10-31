@@ -106,7 +106,7 @@ const Register = () => {
                             <span>Already Have an Account?</span>
                             <Link href="/login" className="link link-hover text-blue-600">Login Here.</Link>
                         </div>
-                        <button type="submit" className="btn btn-primary mt-4" disabled={isSubmitting}>
+                        <button type="submit" className="btn bg-tprimary mt-4" disabled={isSubmitting}>
                             {isSubmitting ? "Registering..." : "Register"}
                         </button>
                     </form>

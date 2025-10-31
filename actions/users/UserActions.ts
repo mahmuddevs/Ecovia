@@ -169,6 +169,46 @@ export const deleteUser = async (id: string) => {
 
   return { success: true, message: "Successfully Deleted User" }
 }
+export const handleForgotPassword = async (
+  email: string,
+  oldPassword: string,
+  newPassword: string
+) => {
+  try {
+    // Connect to DB
+    await dbConnect();
+
+    // Find the user by email
+    const user = await User.findOne({ email });
+    if (!user) {
+      return { success: false, message: "User not found." };
+    }
+
+    // Check if old password matches
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) {
+      return { success: false, message: "Old password is incorrect." };
+    }
+
+    // Hash the new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Update the password
+    const result = await User.updateOne(
+      { email },
+      { $set: { password: hashedPassword } }
+    );
+
+    if (result.modifiedCount > 0) {
+      return { success: true, message: "Password updated successfully." };
+    } else {
+      return { success: false, message: "Password not updated." };
+    }
+  } catch (error) {
+    return { success: false, message: "Something went wrong.", error };
+  }
+};
+
 
 export const handleUpdateUserType = async (id: string, userType: string) => {
   if (!id || !userType) {

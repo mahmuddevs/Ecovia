@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { FaCalendarDay, FaMapPin } from "react-icons/fa6";
-import { EventCardProps } from "../(home)/upcoming-events";
 import Image from "next/image";
+import { EventType } from "@/app/(home)/events/AllEvents";
 
-const EventCard = ({ _id, bannerImage, name, date, location }: EventCardProps) => {
+const EventCard = ({ _id, bannerImage, name, date, location }: EventType) => {
     return (
         <div className="bg-white shadow-lg rounded-2xl overflow-hidden transition hover:shadow-xl flex flex-col h-full">
             <div className="flex-shrink-0">
@@ -33,7 +33,7 @@ const EventCard = ({ _id, bannerImage, name, date, location }: EventCardProps) =
                 <div className="mt-auto pt-4">
                     <Link
                         href={`/events/${_id}`}
-                        className="inline-block w-full text-center bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-md text-sm font-medium"
+                        className="inline-block w-full text-center bg-tprimary hover:bg-emerald-700 text-white px-4 py-2 rounded-md text-sm font-medium"
                     >
                         Learn More
                     </Link>

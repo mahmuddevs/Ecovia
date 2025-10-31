@@ -95,7 +95,7 @@ const Login = () => {
               </span>
             )}
             <div className="flex justify-between">
-              <a className="link link-hover">Forgot password?</a>
+              <Link href="/forgot-password" className="link link-hover">Forgot password?</Link>
               <div>
                 Or,{" "}
                 <Link
@@ -108,7 +108,7 @@ const Login = () => {
             </div>
             <button
               type="submit"
-              className="btn btn-primary mt-4"
+              className="btn bg-tprimary mt-4"
               disabled={isSubmitting}
             >
               {isSubmitting ? "Logging In..." : "Login"}

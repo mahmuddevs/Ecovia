@@ -14,24 +14,44 @@ interface EventFormData {
   bannerImage: FileList | string
 }
 
-export const getAllEvents = async (sortOrder: number = 0) => {
-  await dbConnect()
+export const getAllEvents = async (
+  page: number = 1,
+  limit: number = 12,
+  sortOrder: number = 0
+) => {
+  await dbConnect();
 
-  let sortOption = {}
+  const skip = (page - 1) * limit;
+
+  let sortOption: Record<string, 1 | -1> = {};
   if (sortOrder !== 0) {
-    sortOption = { date: sortOrder === -1 ? -1 : 1 }
+    sortOption = { date: sortOrder === -1 ? -1 : 1 };
   }
 
-  const events = await Event.find({}).sort(sortOption)
+  const [events, total] = await Promise.all([
+    Event.find({})
+      .sort(sortOption)
+      .skip(skip)
+      .limit(limit),
+    Event.countDocuments(),
+  ]);
 
-  if (!events) {
-    return { success: false, message: "No Events Found" }
+  if (!events || events.length === 0) {
+    return { success: false, message: "No Events Found" };
   }
 
-  const safeEvents = JSON.parse(JSON.stringify(events))
+  // Convert Mongoose documents safely to plain JSON objects
+  const safeEvents = JSON.parse(JSON.stringify(events));
 
-  return { success: true, events: safeEvents }
-}
+  return {
+    success: true,
+    events: safeEvents,
+    total,
+    totalPages: Math.ceil(total / limit),
+    currentPage: page,
+  };
+};
+
 
 export const getEventById = async (id: string) => {
   await dbConnect()

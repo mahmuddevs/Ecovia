@@ -94,7 +94,7 @@ function PaymentForm({ eventID, closeModal }: { eventID: string, closeModal: () 
     <form id="payment-form" onSubmit={handleSubmit}>
       <PaymentElement id="payment-element" options={{ layout: "tabs" }} />
       <button
-        className="btn bg-emerald-600 w-full text-white"
+        className="btn bg-tprimary w-full text-white"
         disabled={!!isLoading || !stripe || !elements}
         id="submit"
       >

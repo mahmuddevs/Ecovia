@@ -40,7 +40,7 @@ const OurTeam = () => {
                             </figure>
                             <div className="card-body items-center text-center">
                                 <h3 className="card-title text-xl font-bold text-gray-800">{member.name}</h3>
-                                <p className="text-emerald-600 font-medium">{member.role}</p>
+                                <p className="text-tprimary font-medium">{member.role}</p>
                                 <p className="text-gray-600 text-sm">{member.bio}</p>
                             </div>
                         </div>
