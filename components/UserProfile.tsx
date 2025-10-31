@@ -4,9 +4,9 @@ import { logoutUser } from "@/actions/users/UserActions";
 import { logout } from "@/lib/features/authSlice/authSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import Swal from "sweetalert2";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 
 interface User {
   name: string;
@@ -15,15 +15,15 @@ interface User {
 }
 
 const UserProfile = () => {
+  const [mounted, setMounted] = useState(false); // <-- for hydration
   const user = useAppSelector((state) => state.auth.user as User);
   const router = useRouter();
+  const pathname = usePathname();
+
   const dispatch = useAppDispatch();
 
-  // State to track if component has mounted
-  const [mounted, setMounted] = useState(false);
-
   useEffect(() => {
-    setMounted(true);
+    setMounted(true); // Only render after client mount
   }, []);
 
   const handleLogout = async () => {
@@ -41,18 +41,13 @@ const UserProfile = () => {
     router.push("/");
   };
 
-  // Only render after mounted to avoid hydration errors
-  if (!mounted) return null;
+  if (!mounted) return null; // Avoid SSR rendering
 
   return user ? (
     <div className="dropdown dropdown-end">
-      <div
-        tabIndex={0}
-        role="button"
-        className="btn btn-ghost btn-circle avatar"
-      >
+      <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
         <div className="w-10 rounded-full">
-          <img alt="User Avatar" src={user?.image} />
+          <img alt="User avatar" src={user?.image} />
         </div>
       </div>
       <ul
@@ -60,13 +55,19 @@ const UserProfile = () => {
         className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-40 p-2 shadow"
       >
         <li>
-          <a>{user.name}</a>
+          <span>{user.name}</span>
         </li>
-        <li>
-          <Link href="/dashboard">Dashboard</Link>
-        </li>
+        {pathname.startsWith("/dashboard") ? (
+          <li>
+            <Link href="/">Home</Link>
+          </li>
+        ) : (
+          <li>
+            <Link href="/dashboard">Dashboard</Link>
+          </li>
+        )}
         <li onClick={handleLogout}>
-          <a>Logout</a>
+          <span>Logout</span>
         </li>
       </ul>
     </div>

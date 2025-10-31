@@ -33,13 +33,9 @@ p {
 }
 
 .dash-nav li {
-  @apply px-2 md:px-6 text-base md:text-xl w-full;
+  @apply text-base md:text-xl w-full;
 }
 
 .dash-nav li a {
-  @apply my-4 flex gap-4 w-full items-center;
-}
-
-.dash-nav li:hover {
-  @apply bg-stone-500 text-white;
+  @apply flex gap-4 w-full items-center px-4;
 }

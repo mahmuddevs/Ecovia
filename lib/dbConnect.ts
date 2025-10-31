@@ -4,7 +4,6 @@ let isConnected: number | undefined = undefined;
 
 const dbConnect = async () => {
     if (isConnected) {
-        console.log("Using existing database connection");
         return;
     }
 
@@ -16,7 +15,6 @@ const dbConnect = async () => {
         const db = await mongoose.connect(process.env.MONGO_URI!);
 
         isConnected = db.connections[0].readyState;
-        console.log("Database connected successfully");
     } catch (err) {
         console.error("Error Connecting DB:", err);
     }

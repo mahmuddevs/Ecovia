@@ -178,11 +178,16 @@ export const handleForgotPassword = async (
     // Connect to DB
     await dbConnect();
 
+    if (newPassword === oldPassword) {
+      return { success: false, message: "New and Old Password Can't Be Same" };
+    }
+
     // Find the user by email
     const user = await User.findOne({ email });
     if (!user) {
       return { success: false, message: "User not found." };
     }
+
 
     // Check if old password matches
     const isMatch = await bcrypt.compare(oldPassword, user.password);
@@ -296,7 +301,6 @@ export const totalVolunteer = async () => {
     userType: "volunteer",
   })
 
-  console.log(totalVolunteerCount)
 
   return totalVolunteerCount
 }
