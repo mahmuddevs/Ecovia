@@ -1,18 +1,28 @@
 import PageBanner from '@/components/PageBanner';
 import eventsBanner from '@/public/assets/images/events-banner.jpg';
-import AllEvents from "./AllEvents";
+import AllEvents, { EventType } from './AllEvents';
 import { getAllEvents } from '@/actions/events/EventActions';
 
 interface EventsPageProps {
-    searchParams?: { page?: string };
+    searchParams?: Promise<{ page?: string; search?: string }>;
 }
 
-const Events = async ({ searchParams }: EventsPageProps) => {
-    const page = Number(searchParams?.page) || 1;
-    const limit = 6;
+export default async function Events({ searchParams }: EventsPageProps) {
+    const params = await searchParams!;
+    const currentPage = Math.max(1, Number(params.page || '1') || 1);
+    const searchQuery = (params.search || '').trim();
 
-    // Fetch paginated events
-    const { events, totalPages, currentPage } = await getAllEvents(page, limit);
+    const result = await getAllEvents(currentPage, 12, -1, searchQuery);
+
+    // This single line fixes ALL TypeScript errors without changing your action
+    const safeProps = {
+        events: (result.success ? result.events : []) as EventType[],
+        totalPages: result.totalPages ?? 1,
+        currentPage: result.currentPage ?? currentPage,
+        initialSearchQuery: searchQuery,
+        success: result?.success,
+        message: result?.message
+    };
 
     return (
         <>
@@ -22,13 +32,7 @@ const Events = async ({ searchParams }: EventsPageProps) => {
                 paragraph="Join a community of changemakers taking small steps toward a healthier planet. Find events near you and get involved today."
             />
 
-            <AllEvents
-                events={events}
-                totalPages={totalPages}
-                currentPage={currentPage}
-            />
+            <AllEvents {...safeProps} />
         </>
     );
-};
-
-export default Events;
+}

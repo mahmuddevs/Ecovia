@@ -1,46 +1,75 @@
 "use client";
-import Link from "next/link";
 
 interface PaginationProps {
   totalPages: number;
   currentPage: number;
-  basePath?: string;
+  onPageChange: (page: number) => void;
 }
 
-const Pagination = ({ totalPages, currentPage, basePath = "/events" }: PaginationProps) => {
+const Pagination = ({ totalPages, currentPage, onPageChange }: PaginationProps) => {
   if (totalPages <= 1) return null;
+
+  const generatePages = () => {
+    const pages = [];
+
+    if (totalPages <= 4) {
+      for (let i = 1; i <= totalPages; i++) pages.push(i);
+      return pages;
+    }
+    pages.push(1);
+
+
+    if (currentPage > 3) pages.push("...");
+
+    for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+      if (i > 1 && i < totalPages) pages.push(i);
+    }
+
+    if (currentPage < totalPages - 2) pages.push("...");
+
+    pages.push(totalPages);
+
+    return pages;
+  };
+
+  const pages = generatePages();
+
   return (
-    <div className="flex justify-center gap-2 mt-6">
-      {currentPage > 1 && (
-        <Link
-          href={`${basePath}?page=${currentPage - 1}`}
-          className="px-3 py-1 rounded-md border bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
+    <div className="flex justify-end mt-6">
+      <div className="join">
+        <button
+          onClick={() => onPageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="join-item btn btn-sm"
         >
-          Previous
-        </Link>
-      )}
+          Prev
+        </button>
 
-      {Array.from({ length: totalPages }, (_, i) => (
-        <Link
-          key={i}
-          href={`${basePath}?page=${i + 1}`}
-          className={`px-3 py-1 rounded-md border ${currentPage === i + 1
-            ? "bg-tprimary text-white border-tprimary"
-            : "bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
-            }`}
-        >
-          {i + 1}
-        </Link>
-      ))}
+        {pages.map((pg, index) =>
+          pg === "..." ? (
+            <button key={index} className="join-item btn btn-sm btn-disabled">
+              ...
+            </button>
+          ) : (
+            <button
+              key={index}
+              onClick={() => onPageChange(Number(pg))}
+              className={`join-item btn btn-sm btn-square ${currentPage === pg ? "btn-active bg-tprimary text-white" : ""
+                }`}
+            >
+              {pg}
+            </button>
+          )
+        )}
 
-      {currentPage < totalPages && (
-        <Link
-          href={`${basePath}?page=${currentPage + 1}`}
-          className="px-3 py-1 rounded-md border bg-white text-gray-700 border-gray-300 hover:bg-gray-100"
+        <button
+          onClick={() => onPageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className="join-item btn btn-sm"
         >
           Next
-        </Link>
-      )}
+        </button>
+      </div>
     </div>
   );
 };

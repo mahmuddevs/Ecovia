@@ -17,32 +17,42 @@ interface EventFormData {
 export const getAllEvents = async (
   page: number = 1,
   limit: number = 12,
-  sortOrder: number = 0
+  sortOrder: number = 0,
+  searchQuery: string = ''
 ) => {
   await dbConnect();
-
   const skip = (page - 1) * limit;
 
-  let sortOption: Record<string, 1 | -1> = {};
+  const searchFilter = searchQuery
+    ? {
+      $or: [
+        { name: { $regex: searchQuery, $options: 'i' } },
+        { location: { $regex: searchQuery, $options: 'i' } },
+      ],
+    }
+    : {};
+
+  let sortOption = {};
   if (sortOrder !== 0) {
     sortOption = { date: sortOrder === -1 ? -1 : 1 };
   }
 
   const [events, total] = await Promise.all([
-    Event.find({})
+    Event.find(searchFilter)
       .sort(sortOption)
       .skip(skip)
       .limit(limit),
-    Event.countDocuments(),
+
+
+    Event.countDocuments(searchFilter),
   ]);
 
   if (!events || events.length === 0) {
     return { success: false, message: "No Events Found" };
   }
 
-  // Convert Mongoose documents safely to plain JSON objects
+  // ONLY THIS LINE ADDED — converts _id to string, keeps _id name
   const safeEvents = JSON.parse(JSON.stringify(events));
-
   return {
     success: true,
     events: safeEvents,

@@ -6,7 +6,7 @@ import { EventType } from "@/app/(home)/events/AllEvents";
 const EventCard = ({ _id, bannerImage, name, date, location }: EventType) => {
     return (
         <div className="bg-white shadow-lg rounded-2xl overflow-hidden transition hover:shadow-xl flex flex-col h-full">
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
                 <Image
                     src={bannerImage}
                     alt={name}
@@ -16,7 +16,7 @@ const EventCard = ({ _id, bannerImage, name, date, location }: EventType) => {
                 />
             </div>
 
-            <div className="p-4 flex flex-col flex-grow">
+            <div className="p-4 flex flex-col grow">
                 <div className="space-y-3">
                     <h2 className="text-xl font-semibold text-gray-800">{name}</h2>
 

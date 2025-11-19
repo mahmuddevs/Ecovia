@@ -1,36 +1,42 @@
 "use client";
 
 import { updateEvent } from "@/actions/events/EventActions";
-import { useAppDispatch } from "@/lib/hooks";
+
 import Image from "next/image";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
+import { Event } from "./EventsTableBody";
 
-type EventType = "Awareness Campaign" | "Clean-up Drive" | "Webinar";
+export type EventType = "Awareness Campaign" | "Clean-up Drive" | "Webinar";
 
 export interface IEventFormInput {
-  _id: string;
+  _id: string; // optional when creating new events
   name: string;
   description: string;
   eventType: EventType;
-  date: string;
+  date: string; // ISO string (e.g. "2025-11-07T06:02:01.372Z")
   location: string;
   maxVolunteer: number;
-  deadline: string;
-  bannerImage: FileList | string;
+  deadline: string; // ISO string
+  bannerImage: string | FileList; // either URL (string) when fetched, or FileList when uploading
+  createdAt?: string;
+  updatedAt?: string;
 }
+
 
 interface EventUpdateModalProps {
   event: IEventFormInput;
   isOpen: boolean;
   onClose: () => void;
+  onUpdated: (event: Event) => void
 }
 
 const EventUpdateModal = ({
   event,
   isOpen,
   onClose,
+  onUpdated
 }: EventUpdateModalProps) => {
   const {
     register,
@@ -81,7 +87,8 @@ const EventUpdateModal = ({
     });
 
     reset();
-    onClose();
+    onClose()
+    onUpdated(updatedEvent)
   };
 
   return (
