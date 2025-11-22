@@ -9,6 +9,7 @@ import { SubmitHandler, useForm } from "react-hook-form"
 import { IoIosEyeOff, IoMdEye } from "react-icons/io"
 import Swal from "sweetalert2"
 
+
 interface LoginFormValues {
   email: string
   password: string
@@ -52,69 +53,95 @@ const Login = () => {
   }
 
   return (
-    <div className="hero bg-base-200 min-h-screen">
-      <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
-        <div className="card-body">
-          <form
-            method="POST"
-            onSubmit={handleSubmit(onSubmit)}
-            className="fieldset"
-          >
-            <label className="fieldset-label">Email</label>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+      <div className="w-full max-w-xl bg-white rounded-3xl shadow-xl border border-gray-100 p-8 md:p-12">
+        <div className="text-center mb-10">
+          <h1 className="text-4xl font-bold mb-2 text-gray-900">Welcome Back</h1>
+          <p className="text-gray-500">Sign in to <span className="text-tprimary font-semibold">Ecovia</span> to continue</p>
+        </div>
+
+        <form
+          method="POST"
+          onSubmit={handleSubmit(onSubmit)}
+          className="space-y-6"
+        >
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-700 block">Email Address</label>
             <input
               type="email"
-              className="input w-full"
-              placeholder="Email"
+              className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-tprimary focus:ring-2 focus:ring-tprimary/20 outline-none transition-all bg-gray-50 focus:bg-white"
+              placeholder="name@example.com"
               {...register("email", { required: "Email is Required" })}
             />
             {errors.email && (
-              <span className="text-error text-xs mt-1">
+              <span className="text-error text-xs mt-1 block">
                 {errors.email.message}
               </span>
             )}
-            <label className="fieldset-label">Password</label>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-gray-700 block">Password</label>
             <div className="relative">
               <input
                 type={`${showPass ? "text" : "password"}`}
-                className="input w-full"
-                placeholder="Password"
-                {...register("password", { required: "Psassword is Required" })}
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-tprimary focus:ring-2 focus:ring-tprimary/20 outline-none transition-all bg-gray-50 focus:bg-white"
+                placeholder="Enter your password"
+                {...register("password", { required: "Password is Required" })}
               />
               <div
                 onClick={() => {
                   setShowPass(!showPass)
                 }}
-                className="text-2xl absolute top-[50%] -translate-y-[50%] right-2 cursor-pointer"
+                className="absolute top-1/2 -translate-y-1/2 right-4 text-gray-400 hover:text-gray-600 cursor-pointer text-xl"
               >
                 {showPass ? <IoIosEyeOff /> : <IoMdEye />}
               </div>
             </div>
             {errors.password && (
-              <span className="text-error text-xs mt-1">
+              <span className="text-error text-xs mt-1 block">
                 {errors.password.message}
               </span>
             )}
-            <div className="flex justify-between">
-              <Link href="/forgot-password" className="link link-hover">Forgot password?</Link>
-              <div>
-                Or,{" "}
-                <Link
-                  href="/register"
-                  className="link link-hover text-blue-600"
-                >
-                  Create an Account.
-                </Link>
-              </div>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <input id="remember-me" name="remember-me" type="checkbox" className="h-4 w-4 text-tprimary focus:ring-tprimary border-gray-300 rounded" />
+              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-600">Remember me</label>
             </div>
-            <button
-              type="submit"
-              className="btn bg-tprimary mt-4"
-              disabled={isSubmitting}
+            <Link href="/forgot-password" className="text-sm font-medium text-tprimary hover:text-tprimary/80 transition-colors">
+              Forgot password?
+            </Link>
+          </div>
+
+          <button
+            type="submit"
+            className="w-full py-3.5 px-4 bg-tprimary hover:bg-tprimary/90 text-white font-semibold rounded-xl shadow-lg shadow-tprimary/30 transition-all transform hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Logging In..." : "Sign In"}
+          </button>
+          {/* 
+          <div className="relative my-8">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-200"></div>
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-4 bg-white text-gray-500">Or continue with</span>
+            </div>
+          </div> */}
+
+          <div className="text-center text-sm text-gray-600">
+            Don't have an account?{" "}
+            <Link
+              href="/register"
+              className="font-semibold text-tprimary hover:text-tprimary/80 transition-colors"
             >
-              {isSubmitting ? "Logging In..." : "Login"}
-            </button>
-          </form>
-        </div>
+              Create an account
+            </Link>
+          </div>
+        </form>
       </div>
     </div>
   )

@@ -5,6 +5,7 @@ import dbConnect from "@/lib/dbConnect"
 import generateToken, { verifyToken } from "@/lib/jwt/JWT"
 import bcrypt from "bcryptjs"
 import { cookies } from "next/headers"
+import nodemailer from "nodemailer"
 
 interface LoginCredentials {
   email: string
@@ -169,50 +170,121 @@ export const deleteUser = async (id: string) => {
 
   return { success: true, message: "Successfully Deleted User" }
 }
-export const handleForgotPassword = async (
-  email: string,
-  oldPassword: string,
-  newPassword: string
-) => {
+export const handleForgotPassword = async (email: string) => {
   try {
-    // Connect to DB
-    await dbConnect();
+    await dbConnect()
 
-    if (newPassword === oldPassword) {
-      return { success: false, message: "New and Old Password Can't Be Same" };
-    }
-
-    // Find the user by email
-    const user = await User.findOne({ email });
+    const lowerEmail = email.toLowerCase()
+    const user = await User.findOne({ email: lowerEmail })
     if (!user) {
-      return { success: false, message: "User not found." };
+      return { success: false, message: "User not found." }
     }
 
+    // Generate Token
+    const token = crypto.getRandomValues(new Uint8Array(32)).reduce((t, e) => t + e.toString(16).padStart(2, '0'), '')
+    const otpExpiry = new Date(Date.now() + 60 * 60 * 1000) // 1 hour expiry to be safe
 
-    // Check if old password matches
-    const isMatch = await bcrypt.compare(oldPassword, user.password);
-    if (!isMatch) {
-      return { success: false, message: "Old password is incorrect." };
+    // Save Token to DB using findOneAndUpdate to ensure it sticks
+    const updatedUser = await User.findOneAndUpdate(
+      { email: lowerEmail },
+      { $set: { otp: token, otpExpiry } },
+      { new: true, strict: false } // Force save even if schema doesn't match
+    )
+
+    if (!updatedUser) {
+      console.error("Failed to update user with token")
+      return { success: false, message: "Failed to generate reset token." }
     }
 
-    // Hash the new password
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    console.log("--- Generate Token Debug ---")
+    console.log("Token generated:", token)
+    console.log("Expiry set to:", otpExpiry)
+    console.log("Updated User OTP in DB:", updatedUser.otp)
+    console.log("----------------------------")
 
-    // Update the password
-    const result = await User.updateOne(
-      { email },
-      { $set: { password: hashedPassword } }
-    );
+    // Send Email
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.SMTP_EMAIL,
+        pass: process.env.SMTP_PASSWORD,
+      },
+    })
 
-    if (result.modifiedCount > 0) {
-      return { success: true, message: "Password updated successfully." };
-    } else {
-      return { success: false, message: "Password not updated." };
+    const resetLink = `${process.env.NEXT_PUBLIC_BASE_URL}/reset-password?token=${token}&email=${lowerEmail}`
+
+    const mailOptions = {
+      from: process.env.SMTP_EMAIL,
+      to: lowerEmail,
+      subject: "Ecovia Password Reset Link",
+      text: `Click the link to reset your password: ${resetLink}. It expires in 1 hour.`,
+      html: `<div style="font-family: Arial, sans-serif; padding: 20px;">
+              <h2>Password Reset Request</h2>
+              <p>Click the button below to reset your password:</p>
+              <a href="${resetLink}" style="background-color: #028a0f; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block;">Reset Password</a>
+              <p>This link expires in 1 hour.</p>
+             </div>`,
     }
-  } catch (error) {
-    return { success: false, message: "Something went wrong.", error };
+
+    await transporter.sendMail(mailOptions)
+
+    return { success: true, message: "Reset link sent to your email." }
+  } catch (error: any) {
+    console.error("Forgot Password Error:", error)
+    return { success: false, message: "Failed to send link.", error: error.message }
   }
-};
+}
+
+export const resetPassword = async (email: string, token: string, newPassword: string) => {
+  try {
+    await dbConnect()
+
+    const lowerEmail = email.toLowerCase()
+    const user = await User.findOne({ email: lowerEmail })
+    if (!user) {
+      return { success: false, message: "User not found." }
+    }
+
+    console.log("--- Reset Password Debug ---")
+    console.log("Email:", lowerEmail)
+    console.log("Received Token:", token)
+    console.log("Stored Token:", user.otp)
+    console.log("Current Time:", new Date().toISOString())
+    console.log("Expiry Time:", user.otpExpiry?.toISOString())
+
+    const isTokenMatch = user.otp === token
+    const isExpired = new Date() > new Date(user.otpExpiry!) // Ensure it's a Date object
+
+    console.log("Token Match:", isTokenMatch)
+    console.log("Is Expired:", isExpired)
+    console.log("User OTP:", user.otp, "Length:", user.otp?.length)
+    console.log("Received Token:", token, "Length:", token?.length)
+    console.log("----------------------------")
+
+    if (!isTokenMatch) {
+      return { success: false, message: "Invalid token. Please check the link." }
+    }
+
+    if (isExpired) {
+      return { success: false, message: "Token has expired. Please request a new one." }
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10)
+
+    await User.updateOne(
+      { email: lowerEmail },
+      {
+        $set: { password: hashedPassword },
+        $unset: { otp: "", otpExpiry: "" },
+      }
+    )
+
+    return { success: true, message: "Password reset successfully." }
+  } catch (error: any) {
+    console.error("Reset Password Error:", error)
+    return { success: false, message: "Failed to reset password.", error: error.message }
+  }
+}
 
 
 export const handleUpdateUserType = async (id: string, userType: string) => {

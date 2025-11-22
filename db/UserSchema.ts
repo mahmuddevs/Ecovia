@@ -12,6 +12,8 @@ export interface IUser extends Document {
     password: string;
     userType?: UserType;
     image?: string;
+    otp?: string;
+    otpExpiry?: Date;
 }
 
 const UserSchema = new Schema<IUser>(
@@ -48,6 +50,12 @@ const UserSchema = new Schema<IUser>(
         image: {
             type: String,
             default: process.env.DEFAULT_USER_IMAGE,
+        },
+        otp: {
+            type: String,
+        },
+        otpExpiry: {
+            type: Date,
         },
     },
     {

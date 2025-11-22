@@ -68,7 +68,7 @@ const EventDetails = async ({ params }: Props) => {
 
         <EventButtons eventId={event._id} />
       </div>
-    </div>
+    </div >
   );
 };
 
