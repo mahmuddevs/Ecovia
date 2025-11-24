@@ -135,16 +135,43 @@ export const logoutUser = async () => {
   return { success: true }
 }
 
-export const getAllUsers = async () => {
+export const getAllUsers = async (
+  page: number = 1,
+  limit: number = 12,
+  searchQuery: string = ''
+) => {
   await dbConnect()
-  const allUsers = await User.find({}).select("-password")
+  const skip = (page - 1) * limit
 
-  if (!allUsers) {
-    return { success: false, users: null }
+  const searchFilter = searchQuery
+    ? {
+      $or: [
+        { name: { $regex: searchQuery, $options: 'i' } },
+        { email: { $regex: searchQuery, $options: 'i' } },
+      ],
+    }
+    : {}
+
+  const [users, total] = await Promise.all([
+    User.find(searchFilter)
+      .select("-password")
+      .skip(skip)
+      .limit(limit),
+    User.countDocuments(searchFilter),
+  ])
+
+  if (!users) {
+    return { success: false, users: [], total: 0, totalPages: 0, currentPage: 1 }
   }
 
-  const safeUsers = JSON.parse(JSON.stringify(allUsers))
-  return { success: true, users: safeUsers }
+  const safeUsers = JSON.parse(JSON.stringify(users))
+  return {
+    success: true,
+    users: safeUsers,
+    total,
+    totalPages: Math.ceil(total / limit),
+    currentPage: page,
+  }
 }
 
 export const deleteUser = async (id: string) => {
@@ -196,12 +223,6 @@ export const handleForgotPassword = async (email: string) => {
       return { success: false, message: "Failed to generate reset token." }
     }
 
-    console.log("--- Generate Token Debug ---")
-    console.log("Token generated:", token)
-    console.log("Expiry set to:", otpExpiry)
-    console.log("Updated User OTP in DB:", updatedUser.otp)
-    console.log("----------------------------")
-
     // Send Email
     const transporter = nodemailer.createTransport({
       service: "gmail",
@@ -245,21 +266,8 @@ export const resetPassword = async (email: string, token: string, newPassword: s
       return { success: false, message: "User not found." }
     }
 
-    console.log("--- Reset Password Debug ---")
-    console.log("Email:", lowerEmail)
-    console.log("Received Token:", token)
-    console.log("Stored Token:", user.otp)
-    console.log("Current Time:", new Date().toISOString())
-    console.log("Expiry Time:", user.otpExpiry?.toISOString())
-
     const isTokenMatch = user.otp === token
     const isExpired = new Date() > new Date(user.otpExpiry!) // Ensure it's a Date object
-
-    console.log("Token Match:", isTokenMatch)
-    console.log("Is Expired:", isExpired)
-    console.log("User OTP:", user.otp, "Length:", user.otp?.length)
-    console.log("Received Token:", token, "Length:", token?.length)
-    console.log("----------------------------")
 
     if (!isTokenMatch) {
       return { success: false, message: "Invalid token. Please check the link." }
@@ -293,6 +301,16 @@ export const handleUpdateUserType = async (id: string, userType: string) => {
   }
 
   await dbConnect()
+
+  const user = await User.findById(id);
+
+  if (!user) {
+    return { success: false, message: "User Not Found" }
+  }
+
+  if (user.userType === "admin") {
+    return { success: false, message: "Admin Can't Be Demoted" }
+  }
 
   const updatedUser = await User.findByIdAndUpdate(
     id,

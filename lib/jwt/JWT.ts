@@ -17,7 +17,6 @@ const generateToken = (email: string, userType: string): string => {
 
 export const verifyToken = (token: string | undefined) => {
     if (!token || typeof token !== "string") {
-        console.error("No Token");
         return;
     }
 

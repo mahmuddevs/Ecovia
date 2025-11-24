@@ -206,7 +206,7 @@ export const updateEvent = async (id: string, data: EventFormData) => {
 
   return {
     success: true,
-    message: "Event Create Successfully",
+    message: "Event Updated Successfully",
     updatedEvent: safeEvent,
   }
 }

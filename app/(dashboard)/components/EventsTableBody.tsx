@@ -34,7 +34,7 @@ const EventsTableBody = () => {
 
   const currentPage = parseInt(searchParams.get("page") || "1", 10);
 
-  // ✅ Fetch paginated events from server
+  // Fetch paginated events from server
   const fetchEvents = async (page: number) => {
     try {
       setLoading(true);

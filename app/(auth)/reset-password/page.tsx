@@ -28,7 +28,6 @@ function ResetPasswordForm() {
   } = useForm<ResetPasswordValues>()
 
   const onSubmit = async (data: ResetPasswordValues) => {
-    console.log(token)
     if (!token || !email) {
       Swal.fire({
         icon: "error",

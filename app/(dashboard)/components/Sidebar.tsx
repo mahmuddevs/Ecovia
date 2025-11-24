@@ -61,7 +61,7 @@ const Sidebar = ({ navActive, close }: SidebarProps) => {
       <div className="flex items-center justify-between p-6">
         <Link href="/" className="flex items-center gap-2">
           <FaLeaf className={`${navActive ? "" : "mx-auto"} text-3xl text-emerald-400`} />
-          {navActive && <span className="inline font-bold text-black text-2xl">EcoAlliance</span>}
+          {navActive && <span className="inline font-bold text-black text-2xl">EcoVia</span>}
         </Link>
         <div className="flex items-center text-2xl xl:hidden" onClick={close}>
           <IoMdClose />

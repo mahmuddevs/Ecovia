@@ -16,9 +16,9 @@ export default function DashboardLayout({
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 1280) {
-        setNavActive(false); // hide on mobile/tablet
+        setNavActive(false);
       } else {
-        setNavActive(true); // show on desktop
+        setNavActive(true);
       }
     };
     handleResize();
@@ -27,15 +27,15 @@ export default function DashboardLayout({
   }, []);
 
   return (
-    <main className="min-h-screen relative overflow-hidden">
+    <main className="min-h-screen relative">
       <div className="flex flex-col xl:flex-row">
         {/* Sidebar */}
         <div
           className={`
             bg-emerald-50 h-screen 
             transition-all duration-500 ease-in-out
-            ${navActive ? "translate-x-0 xl:w-2/12" : "-translate-x-full xl:w-[80px]"}
-            max-xl:fixed max-xl:top-0 max-xl:left-0 max-xl:z-50 max-xl:w-[280px] xl:relative xl:translate-x-0
+            ${navActive ? "translate-x-0 xl:w-2/12" : "-translate-x-full xl:w-20"}
+            max-xl:fixed max-xl:top-0 max-xl:left-0 max-xl:z-50 max-xl:w-[280px] xl:sticky xl:top-0 xl:translate-x-0
           `}
         >
           <Sidebar navActive={navActive} close={() => setNavActive(false)} />
@@ -52,7 +52,7 @@ export default function DashboardLayout({
         {/* Content */}
         <div
           className={`
-            transition-all duration-500 ease-in-out min-h-screen
+            transition-all duration-500 ease-in-out
             w-full
             ${navActive ? "xl:ml-3/12" : ""}
           `}

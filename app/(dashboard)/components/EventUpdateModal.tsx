@@ -46,7 +46,7 @@ const EventUpdateModal = ({
   } = useForm<IEventFormInput>();
 
   useEffect(() => {
-    if (event && isOpen) {
+    if (event) {
       reset({
         _id: event._id,
         name: event.name,
@@ -59,9 +59,52 @@ const EventUpdateModal = ({
         bannerImage: event.bannerImage,
       });
     }
-  }, [event, isOpen, reset]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const onSubmit = async (data: IEventFormInput) => {
+    // Check for changes
+    const isNameChanged = data.name !== event.name;
+    const isDescriptionChanged = data.description !== event.description;
+    const isTypeChanged = data.eventType !== event.eventType;
+    const isLocationChanged = data.location !== event.location;
+    const isMaxVolunteerChanged = Number(data.maxVolunteer) !== event.maxVolunteer;
+
+    // Date comparison (ensure format matches YYYY-MM-DD)
+    const originalDate = new Date(event.date).toISOString().split("T")[0];
+    const isDateChanged = data.date !== originalDate;
+
+    const originalDeadline = new Date(event.deadline).toISOString().split("T")[0];
+    const isDeadlineChanged = data.deadline !== originalDeadline;
+
+    // Image comparison
+    let isImageChanged = false;
+    if (typeof data.bannerImage === 'object' && data.bannerImage.length > 0) {
+      isImageChanged = true; // New file uploaded
+    } else if (typeof data.bannerImage === 'string' && data.bannerImage !== event.bannerImage) {
+      isImageChanged = true; // URL changed (unlikely in this form but possible)
+    }
+
+    if (
+      !isNameChanged &&
+      !isDescriptionChanged &&
+      !isTypeChanged &&
+      !isLocationChanged &&
+      !isMaxVolunteerChanged &&
+      !isDateChanged &&
+      !isDeadlineChanged &&
+      !isImageChanged
+    ) {
+      Swal.fire({
+        icon: "warning",
+        title: "No Changes Detected",
+        text: "Please update at least one field before submitting.",
+        timer: 2000,
+        showConfirmButton: false
+      });
+      return;
+    }
+
     const { success, message, updatedEvent } = await updateEvent(
       event._id,
       data

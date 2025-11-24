@@ -17,7 +17,7 @@ const Header = () => {
       <li>
         <Link
           href="/"
-          className="text-black lg:text-white hover:text-emerald-300 transition-colors font-semibold"
+          className="text-black lg:text-white hover:text-emerald-300 transition-colors font-semibold text-lg"
         >
           Home
         </Link>
@@ -25,7 +25,7 @@ const Header = () => {
       <li>
         <Link
           href="/about"
-          className="text-black lg:text-white hover:text-emerald-300 transition-colors font-semibold"
+          className="text-black lg:text-white hover:text-emerald-300 transition-colors font-semibold text-lg"
         >
           About Us
         </Link>
@@ -33,7 +33,7 @@ const Header = () => {
       <li>
         <Link
           href="/events"
-          className="text-black lg:text-white hover:text-emerald-300 transition-colors font-semibold"
+          className="text-black lg:text-white hover:text-emerald-300 transition-colors font-semibold text-lg"
         >
           Events
         </Link>
@@ -41,7 +41,7 @@ const Header = () => {
       <li>
         <Link
           href="/donate"
-          className="text-black lg:text-white hover:text-emerald-300 transition-colors font-semibold"
+          className="text-black lg:text-white hover:text-emerald-300 transition-colors font-semibold text-lg"
         >
           Donate
         </Link>
@@ -49,7 +49,7 @@ const Header = () => {
       <li>
         <Link
           href="/contact"
-          className="text-black lg:text-white hover:text-emerald-300 transition-colors font-semibold"
+          className="text-black lg:text-white hover:text-emerald-300 transition-colors font-semibold text-lg"
         >
           Contact Us
         </Link>
@@ -60,7 +60,7 @@ const Header = () => {
   if (!mounted) return null; // prevent hydration errors
 
   return (
-    <header className="w-full bg-black/40 backdrop-blur-sm fixed top-0 z-[999]">
+    <header className="w-full bg-black/40 backdrop-blur-sm fixed top-0 z-999">
       <div className="navbar justify-between global-container">
         <Link href="/" className="flex items-center gap-2">
           <FaLeaf className="h-6 w-6 text-tprimary" />

@@ -6,6 +6,8 @@ import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { FaHome, FaSignOutAlt, FaUser } from "react-icons/fa";
+import { MdDashboard } from "react-icons/md";
 import Swal from "sweetalert2";
 
 interface User {
@@ -52,22 +54,30 @@ const UserProfile = () => {
       </div>
       <ul
         tabIndex={0}
-        className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-40 p-2 shadow"
+        className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
       >
-        <li>
-          <span>{user.name}</span>
+        <li className="disabled text-gray-500 ">
+          <span className="flex items-center gap-2 text-base">
+            <FaUser /> {user.name}
+          </span>
         </li>
         {pathname.startsWith("/dashboard") ? (
           <li>
-            <Link href="/">Home</Link>
+            <Link href="/" className="flex items-center gap-2">
+              <FaHome /> Home
+            </Link>
           </li>
         ) : (
           <li>
-            <Link href="/dashboard">Dashboard</Link>
+            <Link href="/dashboard" className="flex items-center gap-2 text-base">
+              <MdDashboard /> Dashboard
+            </Link>
           </li>
         )}
         <li onClick={handleLogout}>
-          <span>Logout</span>
+          <span className="flex items-center gap-2 text-red-600 hover:bg-red-50 text-base">
+            <FaSignOutAlt /> Logout
+          </span>
         </li>
       </ul>
     </div>
