@@ -1,10 +1,12 @@
-import mongoose, { Document, Model, Schema, Types } from "mongoose"
+import mongoose, { Document, Model, Schema, Types } from "mongoose";
 
 interface IDonation extends Document {
-  userEmail: string
-  userID: Types.ObjectId
-  amount: number
-  eventID: Types.ObjectId
+  userEmail: string;
+  userID: Types.ObjectId;
+  amount: number;
+  eventID: Types.ObjectId;
+  currency: string;
+  transactionId: string;
 }
 
 const DonationSchema = new Schema<IDonation>(
@@ -33,14 +35,23 @@ const DonationSchema = new Schema<IDonation>(
       type: Schema.Types.ObjectId,
       required: [true, "EventID is required"],
     },
+    currency: {
+      type: String,
+      required: [true, "Currency is required"],
+      default: "usd",
+    },
+    transactionId: {
+      type: String,
+      required: [true, "Transaction ID is required"],
+    },
   },
   {
     timestamps: true,
   }
-)
+);
 
 const Donation: Model<IDonation> =
   mongoose.models.Donation ||
-  mongoose.model<IDonation>("Donation", DonationSchema)
+  mongoose.model<IDonation>("Donation", DonationSchema);
 
-export default Donation
+export default Donation;

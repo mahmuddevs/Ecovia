@@ -1,13 +1,15 @@
-"use server"
+"use server";
 
-import Donation from "@/db/DonationSchema"
-import dbConnect from "@/lib/dbConnect"
+import Donation from "@/db/DonationSchema";
+import dbConnect from "@/lib/dbConnect";
 
 interface TransactionInfo {
-  userEmail: string | undefined
-  userID: string | undefined
-  amount: number | undefined
-  eventID: string | undefined
+  userEmail: string | undefined;
+  userID: string | undefined;
+  amount: number | undefined;
+  eventID: string | undefined;
+  currency: string | undefined;
+  transactionId: string | undefined;
 }
 
 export const saveTransaction = async ({
@@ -15,31 +17,44 @@ export const saveTransaction = async ({
   userID,
   amount,
   eventID,
+  currency,
+  transactionId,
 }: TransactionInfo) => {
-  if (!userEmail || !userID || !amount || !eventID) {
-    return { success: false, message: "No Data Received" }
+  if (
+    !userEmail ||
+    !userID ||
+    !amount ||
+    !eventID ||
+    !currency ||
+    !transactionId
+  ) {
+    return { success: false, message: "No Data Received" };
   }
 
-  await dbConnect()
+  await dbConnect();
 
   const payload = {
     userEmail,
     userID,
     amount,
     eventID,
-  }
+    currency,
+    transactionId,
+  };
 
-  const result = await Donation.create(payload)
+  console.log("Saving donation with payload:", payload);
+  const result = await Donation.create(payload);
+  console.log("Saved donation result:", result);
 
   if (!result) {
-    return { success: false, message: "Failed To Save Transaction" }
+    return { success: false, message: "Failed To Save Transaction" };
   }
 
-  return { success: true, message: "Transaction Successful" }
-}
+  return { success: true, message: "Transaction Successful" };
+};
 
 export const getDonationOfThisYear = async () => {
-  const currentYear = new Date().getFullYear()
+  const currentYear = new Date().getFullYear();
   const result = await Donation.aggregate([
     {
       $match: {
@@ -58,4 +73,4 @@ export const getDonationOfThisYear = async () => {
   ]);
 
   return result[0]?.totalAmount || 0;
-}
+};

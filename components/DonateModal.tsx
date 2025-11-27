@@ -1,37 +1,37 @@
-"use client"
-import { useAppSelector } from "@/lib/hooks"
-import { FormEvent, RefObject } from "react"
-import Swal from "sweetalert2"
+"use client";
+import { useAppSelector } from "@/lib/hooks";
+import { FormEvent, RefObject } from "react";
+import Swal from "sweetalert2";
 
 type Props = {
-  modalRef: RefObject<HTMLDialogElement | null>
-  openPaymentModal: (amount: number) => void
-  formRef: RefObject<HTMLFormElement | null>
-}
+  modalRef: RefObject<HTMLDialogElement | null>;
+  openPaymentModal: (amount: number) => void;
+  formRef: RefObject<HTMLFormElement | null>;
+};
 
 const DonateModal = ({ modalRef, openPaymentModal, formRef }: Props) => {
-  const { user } = useAppSelector(state => state.auth)
+  const { user } = useAppSelector((state) => state.auth);
   const handleInput = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
     if (!user) {
       Swal.fire({
         position: "top-end",
         icon: "warning",
         title: "Please Login As A Donor",
         showConfirmButton: false,
-        timer: 1500
+        timer: 1500,
       });
-      formRef.current?.reset()
-      modalRef.current?.close()
-      return
+      formRef.current?.reset();
+      modalRef.current?.close();
+      return;
     }
-    const formData = new FormData(e.currentTarget)
-    const inputAmount = Number(formData.get("amount"))
+    const formData = new FormData(e.currentTarget);
+    const inputAmount = Number(formData.get("amount"));
     if (inputAmount < 15) {
-      return
+      return;
     }
-    openPaymentModal(inputAmount)
-  }
+    openPaymentModal(inputAmount);
+  };
 
   return (
     <dialog ref={modalRef} className="modal modal-middle">
@@ -59,8 +59,8 @@ const DonateModal = ({ modalRef, openPaymentModal, formRef }: Props) => {
               type="button"
               className="btn w-full"
               onClick={() => {
-                formRef.current?.reset()
-                modalRef.current?.close()
+                formRef.current?.reset();
+                modalRef.current?.close();
               }}
             >
               Cancel
@@ -69,6 +69,6 @@ const DonateModal = ({ modalRef, openPaymentModal, formRef }: Props) => {
         </div>
       </div>
     </dialog>
-  )
-}
-export default DonateModal
+  );
+};
+export default DonateModal;

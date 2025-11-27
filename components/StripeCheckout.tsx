@@ -1,34 +1,40 @@
-"use client"
-import { saveTransaction } from "@/actions/events/DonationActions"
-import { useAppSelector } from "@/lib/hooks"
+"use client";
+import { saveTransaction } from "@/actions/events/DonationActions";
+import { useAppSelector } from "@/lib/hooks";
 import {
   Elements,
   PaymentElement,
   useElements,
   useStripe,
-} from "@stripe/react-stripe-js"
-import { Appearance, loadStripe } from "@stripe/stripe-js"
-import { FormEvent, useState } from "react"
-import Swal from "sweetalert2"
+} from "@stripe/react-stripe-js";
+import { Appearance, loadStripe } from "@stripe/stripe-js";
+import { FormEvent, useState } from "react";
+import Swal from "sweetalert2";
 
 // This is your test publishable API key.
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY!)
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY!);
 
-function PaymentForm({ eventID, closeModal }: { eventID: string, closeModal: () => void }) {
-  const stripe = useStripe()
-  const elements = useElements()
-  const { user } = useAppSelector(state => state.auth)
-  const [message, setMessage] = useState<string | null | undefined>(null)
-  const [isLoading, setIsLoading] = useState<Boolean>(false)
+function PaymentForm({
+  eventID,
+  closeModal,
+}: {
+  eventID: string;
+  closeModal: () => void;
+}) {
+  const stripe = useStripe();
+  const elements = useElements();
+  const { user } = useAppSelector((state) => state.auth);
+  const [message, setMessage] = useState<string | null | undefined>(null);
+  const [isLoading, setIsLoading] = useState<Boolean>(false);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
 
     if (!stripe || !elements) {
-      return
+      return;
     }
 
-    setIsLoading(true)
+    setIsLoading(true);
 
     const paymentResult = await stripe.confirmPayment({
       elements,
@@ -36,37 +42,41 @@ function PaymentForm({ eventID, closeModal }: { eventID: string, closeModal: () 
         return_url: "",
       },
       redirect: "if_required",
-    })
+    });
 
-    const { error, paymentIntent } = paymentResult
+    const { error, paymentIntent } = paymentResult;
 
     if (error) {
       if (error.type === "card_error" || error.type === "validation_error") {
-        setMessage(error.message)
+        setMessage(error.message);
       } else {
-        setMessage("An unexpected error occurred.")
+        setMessage("An unexpected error occurred.");
       }
       Swal.fire({
         position: "top-end",
         icon: "error",
         title: `${error.message}`,
         showConfirmButton: false,
-        timer: 1500
+        timer: 1500,
       });
-      setIsLoading(false)
-      return
+      setIsLoading(false);
+      return;
     }
 
-    const amount = paymentIntent.amount
+    const amount = paymentIntent.amount;
+    const currency = paymentIntent.currency;
+    const transactionId = paymentIntent.id;
 
     const transactionData = {
       userEmail: user?.email,
       userID: user?._id,
       amount: amount / 100,
-      eventID
-    }
+      eventID,
+      currency,
+      transactionId,
+    };
 
-    const { success, message } = await saveTransaction(transactionData)
+    const { success, message } = await saveTransaction(transactionData);
 
     if (!success) {
       Swal.fire({
@@ -74,21 +84,21 @@ function PaymentForm({ eventID, closeModal }: { eventID: string, closeModal: () 
         icon: "error",
         title: `${message}`,
         showConfirmButton: false,
-        timer: 1500
+        timer: 1500,
       });
-      setIsLoading(false)
-      return
+      setIsLoading(false);
+      return;
     }
     Swal.fire({
       position: "top-end",
       icon: "success",
       title: `${message}`,
       showConfirmButton: false,
-      timer: 1500
+      timer: 1500,
     });
-    setIsLoading(false)
-    closeModal()
-  }
+    setIsLoading(false);
+    closeModal();
+  };
 
   return (
     <form id="payment-form" onSubmit={handleSubmit}>
@@ -105,21 +115,21 @@ function PaymentForm({ eventID, closeModal }: { eventID: string, closeModal: () 
       {/* Show any error or success messages */}
       {message && <div id="payment-message">{message}</div>}
     </form>
-  )
+  );
 }
 
 export default function CheckoutForm({
   clientSecret,
   eventID,
-  closeModal
+  closeModal,
 }: {
-  clientSecret: string,
-  eventID: string,
-  closeModal: () => void
+  clientSecret: string;
+  eventID: string;
+  closeModal: () => void;
 }) {
   const appearance = {
     theme: "stripe",
-  } as Appearance | undefined
+  } as Appearance | undefined;
 
   return (
     <Elements
@@ -129,5 +139,5 @@ export default function CheckoutForm({
     >
       <PaymentForm eventID={eventID} closeModal={closeModal} />
     </Elements>
-  )
+  );
 }

@@ -1,12 +1,13 @@
-"use client"
+"use client";
 
-import { FaHeart, FaMapPin, FaUsers } from "react-icons/fa6"
-import { Event } from "./page"
-import Link from "next/link"
-import Image from "next/image"
-import { useEffect, useRef, useState } from "react"
-import PaymentModal from "./PaymentModal"
-import DonateModal from "@/components/DonateModal"
+import { FaHeart, FaMapPin, FaUsers } from "react-icons/fa6";
+import { Event } from "./page";
+import Link from "next/link";
+import Image from "next/image";
+import { useEffect, useRef, useState } from "react";
+import PaymentModal from "./PaymentModal";
+import DonateModal from "@/components/DonateModal";
+import { createPaymentIntent } from "@/app/actions/stripe";
 
 const EventCard = ({
   _id,
@@ -17,40 +18,26 @@ const EventCard = ({
   date,
   bannerImage,
 }: Event) => {
-  const paymentModalRef = useRef<HTMLDialogElement>(null)
-  const donateModalRef = useRef<HTMLDialogElement>(null)
-  const [clientSecret, setClientSecret] = useState<string | null>(null)
-  const formRef = useRef<HTMLFormElement>(null)
+  const paymentModalRef = useRef<HTMLDialogElement>(null);
+  const donateModalRef = useRef<HTMLDialogElement>(null);
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const formRef = useRef<HTMLFormElement>(null);
 
   const openDonateModal = () => {
-    donateModalRef.current?.showModal()
-  }
+    donateModalRef.current?.showModal();
+  };
   const openPaymentModal = async (amount: number) => {
-
-    const fetchClientSecret = async () => {
-      const res = await fetch("/api/stripePaymentIntent", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          amount: Math.round(amount * 100),
-        }),
-      })
-
-      const { clientSecret } = await res.json()
-      return clientSecret
-    }
-
-    const clientSecret = await fetchClientSecret()
-    setClientSecret(clientSecret)
-  }
+    const { clientSecret } = await createPaymentIntent(
+      Math.round(amount * 100)
+    );
+    setClientSecret(clientSecret);
+  };
 
   useEffect(() => {
-    paymentModalRef.current?.showModal()
-    formRef.current?.reset()
-    donateModalRef.current?.close()
-  }, [clientSecret])
+    paymentModalRef.current?.showModal();
+    formRef.current?.reset();
+    donateModalRef.current?.close();
+  }, [clientSecret]);
 
   return (
     <>
@@ -123,7 +110,7 @@ const EventCard = ({
         />
       )}
     </>
-  )
-}
+  );
+};
 
-export default EventCard
+export default EventCard;

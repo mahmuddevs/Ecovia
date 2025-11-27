@@ -10,6 +10,7 @@ import { useAppSelector } from "@/lib/hooks";
 import { redirect } from "next/navigation";
 import DonateModal from "./DonateModal";
 import PaymentModal from "@/app/(home)/donate/PaymentModal";
+import { createPaymentIntent } from "@/app/actions/stripe";
 
 export type FormValues = {
   name: string;
@@ -19,10 +20,10 @@ export type FormValues = {
 
 const EventButtons = ({ eventId }: { eventId: string }) => {
   const volunteerModalRef = useRef<HTMLDialogElement>(null);
-  const paymentModalRef = useRef<HTMLDialogElement>(null)
-  const donateModalRef = useRef<HTMLDialogElement>(null)
-  const [clientSecret, setClientSecret] = useState<string | null>(null)
-  const formRef = useRef<HTMLFormElement>(null)
+  const paymentModalRef = useRef<HTMLDialogElement>(null);
+  const donateModalRef = useRef<HTMLDialogElement>(null);
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const formRef = useRef<HTMLFormElement>(null);
   const { user } = useAppSelector((state) => state.auth);
 
   const {
@@ -51,34 +52,20 @@ const EventButtons = ({ eventId }: { eventId: string }) => {
   };
 
   const openDonateModal = () => {
-    donateModalRef.current?.showModal()
-  }
+    donateModalRef.current?.showModal();
+  };
   const openPaymentModal = async (amount: number) => {
-    const fetchClientSecret = async () => {
-      const res = await fetch("/api/stripePaymentIntent", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          amount: Math.round(amount * 100),
-        }),
-      })
-
-      const { clientSecret } = await res.json()
-      return clientSecret
-    }
-
-    const clientSecret = await fetchClientSecret()
-    setClientSecret(clientSecret)
-  }
+    const { clientSecret } = await createPaymentIntent(
+      Math.round(amount * 100)
+    );
+    setClientSecret(clientSecret);
+  };
 
   useEffect(() => {
-    paymentModalRef.current?.showModal()
-    formRef.current?.reset()
-    donateModalRef.current?.close()
-  }, [clientSecret])
-
+    paymentModalRef.current?.showModal();
+    formRef.current?.reset();
+    donateModalRef.current?.close();
+  }, [clientSecret]);
 
   const onSubmit = async (data: FormValues) => {
     const { success, message } = await ApplyAsVolunteer({ eventId, ...data });
