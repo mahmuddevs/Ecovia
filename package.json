@@ -17,6 +17,8 @@
     "daisyui": "^5.3.9",
     "jose": "^6.1.0",
     "jsonwebtoken": "^9.0.2",
+    "jspdf": "^3.0.4",
+    "jspdf-autotable": "^5.0.2",
     "moment": "^2.30.1",
     "mongoose": "^8.19.2",
     "next": "16.0.0",

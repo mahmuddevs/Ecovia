@@ -3,6 +3,7 @@ import TotalDonations from "@/app/(dashboard)/components/admin/TotalDonations"
 import TotalVolunteers from "@/app/(dashboard)/components/admin/TotalVolunteers"
 import UpcomingEvents from "@/app/(dashboard)/components/admin/UpcomingEvents"
 import UsersPerMonth from "@/app/(dashboard)/components/admin/UsersPerMonth"
+import DonationReportGenerator from "@/app/(dashboard)/components/admin/DonationReportGenerator"
 
 const Admin = async () => {
   const { userPerMonth } = await getUserPerMonth()
@@ -14,8 +15,10 @@ const Admin = async () => {
         <TotalVolunteers />
         <UpcomingEvents />
       </div>
+      <DonationReportGenerator />
       <UsersPerMonth data={userPerMonth} />
     </section>
   )
 }
 export default Admin
+

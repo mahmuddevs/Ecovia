@@ -10,7 +10,7 @@ import { useAppSelector } from "@/lib/hooks";
 import { redirect } from "next/navigation";
 import DonateModal from "./DonateModal";
 import PaymentModal from "@/app/(home)/donate/PaymentModal";
-import { createPaymentIntent } from "@/app/actions/stripe";
+import { createPaymentIntent } from "@/actions/stripe";
 
 export type FormValues = {
   name: string;

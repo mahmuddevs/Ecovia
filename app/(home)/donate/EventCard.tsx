@@ -7,7 +7,7 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import PaymentModal from "./PaymentModal";
 import DonateModal from "@/components/DonateModal";
-import { createPaymentIntent } from "@/app/actions/stripe";
+import { createPaymentIntent } from "@/actions/stripe";
 
 const EventCard = ({
   _id,

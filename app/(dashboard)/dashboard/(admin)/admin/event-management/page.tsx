@@ -5,6 +5,7 @@ import { FaPlus, FaUsers } from "react-icons/fa6"
 const EventManagement = () => {
     return (
         <>
+            <h3 className="text-2xl font-bold my-4">Event Management</h3>
             <div className="tabs tabs-lift">
                 <label className="tab">
                     <input type="radio" name="my_tabs_4" />

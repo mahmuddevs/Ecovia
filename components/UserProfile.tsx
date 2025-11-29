@@ -63,7 +63,7 @@ const UserProfile = () => {
         </li>
         {pathname.startsWith("/dashboard") ? (
           <li>
-            <Link href="/" className="flex items-center gap-2">
+            <Link href="/" className="flex items-center gap-2 text-base">
               <FaHome /> Home
             </Link>
           </li>

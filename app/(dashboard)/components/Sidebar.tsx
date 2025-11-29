@@ -40,7 +40,6 @@ const Sidebar = ({ navActive, close }: SidebarProps) => {
       { label: "Manage Users", href: "/dashboard/admin/manage-users", icon: <FaUsers /> },
       { label: "Manage Event", href: "/dashboard/admin/event-management", icon: <HiOutlineCalendarDays /> },
       { label: "Donations", href: "/dashboard/admin/donations", icon: <FaHandHoldingHeart /> },
-      { label: "Reports & Analytics", href: "/dashboard/admin/reports", icon: <HiOutlineChartBar /> },
     ],
     volunteer: [
       { label: "Overview", href: "/dashboard/volunteer", icon: <MdDashboard /> },
